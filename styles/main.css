@@ -1,0 +1,71 @@
+body {
+  font-family: 'Source Serif Pro', Georgia;
+  font-weight: 400;
+  background-color: #f8f8f8;
+}
+
+a {
+  color: #0074bf;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+}
+
+.container {
+  max-width: 700px;
+}
+
+.react-spinner {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  top: 50%;
+  left: 50%;
+}
+
+.react-spinner_bar {
+  -webkit-animation: react-spinner_spin 1.2s linear infinite;
+  -moz-animation: react-spinner_spin 1.2s linear infinite;
+  animation: react-spinner_spin 1.2s linear infinite;
+  border-radius: 5px;
+  background-color: #555;
+  position: absolute;
+  width: 20%;
+  height: 7.8%;
+  top: -3.9%;
+  left: -10%;
+}
+
+@keyframes react-spinner_spin {
+ 0% { opacity: 1; }
+ 100% { opacity: 0.15; }
+}
+
+@-moz-keyframes react-spinner_spin {
+ 0% { opacity: 1; }
+ 100% { opacity: 0.15; }
+}
+
+@-webkit-keyframes react-spinner_spin {
+ 0% { opacity: 1; }
+ 100% { opacity: 0.15; }
+}
+
+.article {
+  color: #111;
+}
+
+.article:hover, .list-view-item a:hover{
+  text-decoration: none;
+}
+
+.detailView p {
+  margin: 1.5em 0;
+  font-size: 18px;
+  line-height: 1.7em;
+}
+
+.list-inline i {
+  font-color: #ccc;
+}

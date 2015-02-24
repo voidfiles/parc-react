@@ -1,0 +1,28 @@
+{
+  "jspm": {
+    "name": "parc-react",
+    "directories": {
+      "lib": "app"
+    },
+    "dependencies": {
+      "bootstrap": "github:twbs/bootstrap@^3.3.2",
+      "immutable": "npm:immutable@^3.6.2",
+      "jquery": "npm:jquery@^2.1.3",
+      "jsx": "^0.1.1",
+      "level-js": "npm:level-js@^2.1.6",
+      "levelup": "npm:levelup@^0.19.0",
+      "localforage": "npm:localforage@^1.2.2",
+      "lovefield": "github:google/lovefield@master",
+      "mcfly": "npm:mcfly@^0.0.9",
+      "moment": "npm:moment@^2.9.0",
+      "pouchdb": "npm:pouchdb@^3.3.0",
+      "react": "^0.12.2",
+      "react-addons": "npm:react-addons@^0.9.0",
+      "react-bootstrap": "npm:react-bootstrap@^0.14.0",
+      "react-flexbox": "github:tcoopman/react-flexbox@^1.0.2",
+      "react-infinite-scroll": "npm:react-infinite-scroll@^0.1.5",
+      "react-router": "npm:react-router@^0.11.6",
+      "react-spinner": "npm:react-spinner@^0.2.1"
+    }
+  }
+}
