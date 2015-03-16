@@ -1,26 +1,30 @@
 import React from 'react';
-import Row from 'react-bootstrap/Row';
-import ListViewItem from './list_view_item.jsx!';
-import ArticleStore from '../stores/articles';
-import AppInfoStore from '../stores/appinfo';
-import articleActions from '../actions/articleActions';
-import InfiniteScroll from 'react-infinite-scroll';
-import {ApiClient, client} from '../client';
-import Loader from './loader.jsx!';
-import $ from 'jquery';
 
+import $ from 'jquery';
+import moment from 'moment';
+import InfiniteScroll from 'react-infinite-scroll';
+
+import Row from 'react-bootstrap/Row';
 import Input from 'react-bootstrap/Input';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import MenuItem from 'react-bootstrap/MenuItem';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 
+import {ApiClient, client} from '../utils/client';
+import Loader from './loader.jsx!';
+import ListViewItem from './list_view_item.jsx!';
+import ArticleStore from '../stores/articles';
+import AppInfoStore from '../stores/appinfo';
+import articleActions from '../actions/articleActions';
+import syncManager from '../utils/sync';
+
 var getState = function() {
 
     var articles = ArticleStore.getArticles();
     var appInfo = AppInfoStore.getAppInfo();
     articles = articles.sort(function (a, b) {
-      return a.get('date_saved_parsed').getTime() - b.get('date_saved_parsed').getTime();
+      return a.get('date_saved_parsed').utc().valueOf() - b.get('date_saved_parsed').utc().valueOf();
     });
 
     var searchQuery = appInfo.get('searchQuery');
@@ -31,6 +35,9 @@ var getState = function() {
     }
 
     var folder = appInfo.get('folder') || 'inbox';
+    articles = articles.filter(function (article) {
+      return article.get('deleted') === false;
+    });
     if (folder === 'archive') {
       articles = articles.filter(function (article) {
         return article.get('archived') === true;
@@ -50,18 +57,31 @@ var getState = function() {
       articles: articles,
       appInfo: appInfo
     };
-}
+};
 
 var lastMeta;
 
-var loadMoreArticles = function () {
-  var params = {};
-  client.getAllArticles().progress(function (meta, data) {
-    lastMeta = meta;
-    articleActions.addArticles(data);
+if (!syncManager.isSyncing()) {
+  var lastSync = syncManager.lastSyncTime();
+  var sync = syncManager.sync();
+  if (!sync) {
+    console.log("Sync manager is locked");
+  }
+
+  sync.progress(function (meta, data) {
+    // We are adding articles, and this is a sync operation
+    if (data) {
+      articleActions.addArticles(data, true);
+    }
+  }).done(function () {
+    var lastSyncDate = moment.utc(lastSync);
+    ArticleStore.getArticles().filter(function (article) {
+      if (article.get('date_updated_parsed').isBefore(lastSyncDate)) {
+        client.saveArticle(article.toJSON());
+      }
+    });
   });
-};
-loadMoreArticles();
+}
 
 export default React.createClass({
   mixins: [ArticleStore.mixin, AppInfoStore.mixin],

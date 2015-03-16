@@ -1,18 +1,20 @@
 import React from 'react';
+
 import Row from 'react-bootstrap/Row';
-import ListView from './list_view.jsx!';
-import FolderView from './folder_view.jsx!';
-import DetailView from './detail_view.jsx!';
-import ArticleStore from '../stores/articles';
 import Router from 'react-router';
-import AppInfoStore from '../stores/appinfo';
 import Input from 'react-bootstrap/Input';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Glyphicon from 'react-bootstrap/Glyphicon';
 import MenuItem from 'react-bootstrap/MenuItem';
 import Button from 'react-bootstrap/Button';
-import AppInfoActions from '../actions/appInfoActions';
 
+
+import AppInfoStore from '../stores/appinfo';
+import ArticleStore from '../stores/articles';
+
+import ListView from './list_view.jsx!';
+import DetailView from './detail_view.jsx!';
+import AppInfoActions from '../actions/appInfoActions';
 
 var getState = function () {
   return {
@@ -49,21 +51,28 @@ var App = React.createClass({
         </DropdownButton>
     );
 
+    var buttonBeforeTitle = (
+      <span><i className="fa fa-search"></i>&nbsp;Parc</span>
+    );
+
+    var buttonBefore = (
+        <DropdownButton bsStyle="default" title={buttonBeforeTitle}
+                        noCaret onSelect={this.changeFolder}>
+          <MenuItem key="1" eventKey='inbox'>Inbox</MenuItem>
+          <MenuItem key="2" eventKey='archive'>Archive</MenuItem>
+        </DropdownButton>
+    );
+
     return (
       <div>
         <header>
           <nav className="navbar navbar-default">
             <div className="container">
-              <Router.Link to="articles" className="navbar-brand">Parc</Router.Link>
+              <form className="navbar-form navbar-left" role="search">
+                <Input type="Search" onKeyUp={this.onKeyUp} buttonBefore={buttonBefore} />
+              </form>
               <form className="navbar-form navbar-right" role="search">
-                <div className="form-group">
-                  <Input type="Search" onKeyUp={this.onKeyUp} addonBefore={<i className="fa fa-search"></i>} buttonAfter={buttonAfter} />
-                  <DropdownButton bsStyle="default" title="Folder"
-                                  noCaret onSelect={this.changeFolder}>
-                    <MenuItem key="1" eventKey='inbox'>Inbox</MenuItem>
-                    <MenuItem key="2" eventKey='archive'>Archive</MenuItem>
-                  </DropdownButton>
-                </div>
+                {buttonAfter}
               </form>
             </div>
           </nav>
@@ -80,7 +89,7 @@ var Route = Router.Route;
 
 var routes = (
   <Route handler={App} path="/">
-    <Route name="articles" path="/" handler={FolderView} />
+    <Route name="articles" path="/" handler={ListView} />
     <Route name="article" path="/article/:articleId" handler={DetailView} />
   </Route>
 );

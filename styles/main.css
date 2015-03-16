@@ -66,6 +66,14 @@ h1, h2, h3, h4 {
   line-height: 1.7em;
 }
 
-.list-inline i {
-  font-color: #ccc;
+.list-inline a.fa {
+  color: #111;
+  font-size: 18px;
+  opacity: .7;
+  cursor: pointer;
+}
+
+.list-inline a.fa:hover {
+  opacity: 1;
+  text-decoration: none;
 }

@@ -7,10 +7,11 @@ var ArticleActions = mcFly.createActions({
       article: article
     };
   },
-  addArticles: function(articles) {
+  addArticles: function(articles, sync) {
     return {
       actionType: 'ADD_ARTICLES',
-      articles: articles
+      articles: articles,
+      sync: sync
     };
   },
   selectArticle: function(article) {
@@ -20,9 +21,20 @@ var ArticleActions = mcFly.createActions({
     };
   },
   archiveArticle: function (article) {
-    console.log("Yo 2");
     return {
       actionType: 'ARCHIVE_ARTICLE',
+      article: article
+    };
+  },
+  unArchiveArticle: function (article) {
+    return {
+      actionType: 'UNARCHIVE_ARTICLE',
+      article: article
+    };
+  },
+  removeArticle: function (article) {
+    return {
+      actionType: 'REMOVE_ARTICLE',
       article: article
     };
   }

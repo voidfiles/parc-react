@@ -51,4 +51,5 @@ var AppInfoStore = mcFly.createStore({
 });
 
 
+
 export default AppInfoStore;

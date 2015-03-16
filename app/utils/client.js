@@ -14,6 +14,7 @@ class ApiClient {
     var deferred = $.Deferred();
     var defaultDef = {
       method: 'GET',
+      contentType: 'application/json',
     };
 
     def = $.extend({}, defaultDef, def);
@@ -41,14 +42,24 @@ class ApiClient {
     });
   }
 
-  getAllArticles (count) {
+  saveArticle (data) {
+    delete data.date_updated_parsed;
+    delete data.date_saved_parsed ;
+    return this.fetch({
+      url: '/articles/' + data.id + "/",
+      data: JSON.stringify(data),
+      method: 'POST',
+    });
+  }
+
+  getAllArticles (count, since) {
     var deferred = $.Deferred();
     var _this = this;
 
     var inner = function (params) {
       _this.getArticles(params).done(function (meta, data) {
+        deferred.notify(meta, data);
         if (meta.has_more) {
-          deferred.notify(meta, data);
           inner({before_id: meta.min_id});
         } else {
           deferred.resolve();
@@ -57,10 +68,15 @@ class ApiClient {
          deferred.reject(meta, data);
       });
     };
-
-    inner({
+    var params = {
       count: count || 50
-    });
+    };
+
+    if (since) {
+      params.since = since;
+    }
+
+    inner(params);
 
     return deferred.promise();
   }
