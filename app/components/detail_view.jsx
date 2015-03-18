@@ -10,19 +10,32 @@ import ArticleStore from  '../stores/articles';
 import ActionBar from './action_bar.jsx!';
 import AppInfoStore from '../stores/appinfo';
 
+var getState = function () {
+    return {
+      hover: false,
+      appInfo: AppInfoStore.getAppInfo()
+    };
+};
 
 export default React.createClass({
   mixins: [Router.State, Router.Navigation, AppInfoStore.mixin],
+  getInitialState: function () {
+      return getState();
+  },
   getArticle: function () {
     return ArticleStore.getArticle(this.getParams().articleId);
   },
   storeDidChange: function() {
-    return;
+    this.setState(getState());
   },
   onDelete: function () {
     this.transitionTo('articles');
   },
   render: function() {
+    if (!this.state.appInfo.get('articlesReady')) {
+      return <div>Loading...</div>
+    }
+
     var formatedDateSaved = moment(this.getArticle().get('date_saved_parsed')).format('ll');
     return (
       <Row className="detailView">

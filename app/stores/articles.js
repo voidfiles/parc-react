@@ -2,6 +2,7 @@ import mcFly from '../dispatcher'
 import Immutable from 'immutable'
 import $ from 'jquery'
 import localforage from 'localforage';
+import appInfoActions from '../actions/appInfoActions';
 import articleActions from '../actions/articleActions';
 import {ApiClient, client} from '../utils/client';
 import moment from 'moment';
@@ -14,6 +15,8 @@ localforage.getItem('articles', function (err, value) {
   }
   value = JSON.parse(value);
   articleActions.addArticles(value, false);
+  console.log("Articles are ready");
+  appInfoActions.updateAppInfo({articlesReady: true});
 });
 
 var bumpArticleModTime = function (article) {

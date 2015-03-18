@@ -77,7 +77,8 @@ if (!syncManager.isSyncing()) {
     var lastSyncDate = moment.utc(lastSync);
     ArticleStore.getArticles().filter(function (article) {
       if (article.get('date_updated_parsed').isBefore(lastSyncDate)) {
-        client.saveArticle(article.toJSON());
+        console.log('Trying to update an article');
+        //client.saveArticle(article.toJSON());
       }
     });
   });
@@ -107,17 +108,23 @@ export default React.createClass({
     if (this.state.sortOrder != nextState.sortOrder) {
       return true;
     }
+    console.log("Comparing app state", this.state.appInfo);
+    if (this.state.appInfo.get('articlesReady') !== nextState.appInfo.get('articlesReady')) {
+      return true;
+    }
 
     return !!(!this.state.articles || !nextState.articles || this.state.articles != nextState.articles);
   },
   render: function() {
     var _this = this;
+    var listViewItems = '';
+    if (this.state.appInfo.get('articlesReady')) {
+      listViewItems = this.state.articles.map(function (story) {
+        return <ListViewItem story={story} key={story.get('id')} />;
+      });
 
-    var listViewItems = this.state.articles.map(function (story) {
-      return <ListViewItem story={story} key={story.get('id')} />;
-    });
-
-    listViewItems = listViewItems.toJS();
+      listViewItems = listViewItems.toJS();
+    }
 
     return (
       <div>

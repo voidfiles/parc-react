@@ -8,6 +8,7 @@ import AppInfoActions from '../actions/appInfoActions';
 var defaults = {
   searchQuery: '',
   sortOrder: 'oldest',
+  articlesReady: false,
 };
 
 var appInfo = Immutable.Map();
